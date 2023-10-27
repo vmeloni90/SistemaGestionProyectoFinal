@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SistemaGestionBussiness.Services
 {
-    internal class ProductoService
+    public class ProductoService
     {
     }
 }

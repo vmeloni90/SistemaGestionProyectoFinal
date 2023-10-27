@@ -5,15 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaGestionBussiness.Interfaces
+namespace SistemaGestionData.Interfaces
 {
-    public class IUsuarioService : IUsuarioRepository
+    public interface IUsuarioRepository
     {
         void AgregarUsuario(Usuario usuario);
+        Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
         Usuario ObtenerUsuarioPorId(int usuarioId);
+        List<Usuario> GetUsuarios();
         void ActualizarUsuario(Usuario usuario);
         void EliminarUsuario(int usuarioId);
-        Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
-        List<Usuario> GetUsuarios();
     }
 }

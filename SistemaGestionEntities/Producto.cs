@@ -13,6 +13,6 @@ namespace SistemaGestionEntities
         public double Costo { get; set; }
         public double PrecioVenta { get; set; }
         public int Stock { get; set; }
-        private Usuario idUsuario { get; set; }
+        public Usuario idUsuario { get; set; }
     }
 }
