@@ -40,6 +40,7 @@ namespace SistemaGestionProyectoFinal.Controllers
                 return View("Index", userModel);
             }
         }
+
         [HttpGet]
         public IActionResult MostrarUsuario(int id)
         {
@@ -107,32 +108,50 @@ namespace SistemaGestionProyectoFinal.Controllers
             return BadRequest(ModelState);
         }
 
-        [HttpPut("{id}")]
-        public IActionResult Actualizar(int id, [FromBody] Usuario usuarioActualizado)
+        [HttpGet]
+        public IActionResult Actualizar(int id)
         {
-            if (usuarioActualizado.Id != id)
+            var user = _usuarioServices.ObtenerUsuarioPorId(id);
+            if (user == null)
             {
-                return BadRequest("El ID del usuario no coincide con el ID de la URL.");
+                return NotFound();
             }
 
-            try
-            {
-                _usuarioServices.ActualizarUsuario(usuarioActualizado);
-                return NoContent(); // Retorna un 204 No Content si todo sale bien
-            }
-            catch (ArgumentNullException)
-            {
-                return BadRequest("El usuario proporcionado no puede ser nulo.");
-            }
-            catch (InvalidOperationException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, ex.Message); // Retorna un 500 Internal Server Error para excepciones generales
-            }
+            return View(user);
         }
+        [HttpPost]
+        public IActionResult ActualizarPost(Usuario usuarioActualizado)
+        {
+            if (usuarioActualizado == null)
+            {
+                return BadRequest("El usuario no puede ser nulo.");
+            }
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _usuarioServices.ActualizarUsuario(usuarioActualizado);
+                    return RedirectToAction("ListarUsuarios");
+                }
+                catch (ArgumentNullException)
+                {
+                    ModelState.AddModelError("", "El usuario proporcionado no puede ser nulo.");
+                }
+                catch (InvalidOperationException ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Ocurrió un error al actualizar el usuario.");
+                }
+            }
+
+            // Si no es válido o hay un error, devuelve a la vista de edición con los errores.
+            return View("ListarUsuarios", usuarioActualizado);
+        }
+
     }
 
 }
