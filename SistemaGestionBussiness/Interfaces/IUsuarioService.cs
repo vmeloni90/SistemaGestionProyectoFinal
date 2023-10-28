@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace SistemaGestionBussiness.Interfaces
 {
-    public class IUsuarioService : IUsuarioRepository
+    public interface IUsuarioService
     {
         void AgregarUsuario(Usuario usuario);
         Usuario ObtenerUsuarioPorId(int usuarioId);
@@ -15,5 +15,6 @@ namespace SistemaGestionBussiness.Interfaces
         void EliminarUsuario(int usuarioId);
         Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
         List<Usuario> GetUsuarios();
+        bool AutenticarUsuario(string nombreUsuario, string passwordPlainText);
     }
 }

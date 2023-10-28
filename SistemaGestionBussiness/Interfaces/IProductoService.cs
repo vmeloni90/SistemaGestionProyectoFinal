@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SistemaGestionBussiness.Interfaces
 {
-    internal interface IProductoService
+    public interface IProductoService
     {
     }
 }

@@ -18,10 +18,8 @@ namespace SistemaGestionData
        public DbSet<Venta> Ventas { get; set; }
        public DbSet<ProductoVendido> ProductosVendidos { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionBuilder)
+        public Context(DbContextOptions<Context> options) : base(options)
         {
-            optionBuilder.UseSqlServer(@"Server=localhost\SQLEXPRESS02;Database=ProyectoFinal;Trusted_Connection=True;"
-);
         }
     }
 }

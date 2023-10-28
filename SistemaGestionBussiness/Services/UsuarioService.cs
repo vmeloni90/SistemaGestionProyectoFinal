@@ -33,22 +33,17 @@ namespace SistemaGestionBussiness.Services
             _usuarioRepository.AgregarUsuario(usuario);
         }
 
-        public void RegistrarUsuario(Usuario usuario)
-        {
-          
-            _usuarioRepository.AgregarUsuario(usuario);
-        }
-
+       
         public bool AutenticarUsuario(string nombreUsuario, string passwordPlainText)
         {
             var usuario = _usuarioRepository.ObtenerUsuarioPorNombreUsuario(nombreUsuario);
             if (usuario != null)
             {
-                var hashedPassword = HashingHelper.HashPassword(passwordPlainText, usuario.Salt);
-                return hashedPassword == usuario.Password;
+                return passwordPlainText == usuario.Password;
             }
             return false;
         }
+
 
         private bool NombreUsuarioYaExiste(string nombreUsuario)
         {
@@ -67,37 +62,49 @@ namespace SistemaGestionBussiness.Services
 
         public void ActualizarUsuario(Usuario usuarioActualizado)
         {
+            // Verificar si usuarioActualizado es nulo
             if (usuarioActualizado == null)
             {
                 throw new ArgumentNullException(nameof(usuarioActualizado));
             }
 
+            // Obtener usuario de la base de datos
             var usuarioEnBD = _usuarioRepository.ObtenerUsuarioPorId(usuarioActualizado.Id);
+
+            // Verificar si el usuario existe en la base de datos
             if (usuarioEnBD == null)
             {
                 throw new InvalidOperationException("El usuario no existe en la base de datos.");
             }
 
-            var existingUser = _usuarioRepository.ObtenerUsuarioPorNombreUsuario(usuarioActualizado.NombreUsuario);
-            if (existingUser != null && existingUser.Id != usuarioActualizado.Id)
+            // Verificar si el nombre de usuario está siendo modificado
+            if (usuarioActualizado.NombreUsuario != usuarioEnBD.NombreUsuario)
             {
-                throw new InvalidOperationException("El nombre de usuario ya está en uso por otro usuario.");
+                // Comprobar si el nuevo nombre de usuario ya existe
+                var existingUser = _usuarioRepository.ObtenerUsuarioPorNombreUsuario(usuarioActualizado.NombreUsuario);
+
+                if (existingUser != null && existingUser.Id != usuarioActualizado.Id)
+                {
+                    throw new InvalidOperationException("El nombre de usuario ya está en uso por otro usuario.");
+                }
             }
 
+            // Actualizar campos del usuario
             usuarioEnBD.Nombre = usuarioActualizado.Nombre;
             usuarioEnBD.Apellido = usuarioActualizado.Apellido;
             usuarioEnBD.NombreUsuario = usuarioActualizado.NombreUsuario;
             usuarioEnBD.Mail = usuarioActualizado.Mail;
 
+            // Verificar si la contraseña ha cambiado y, en ese caso, actualizarla
             if (usuarioActualizado.Password != usuarioEnBD.Password)
             {
-               
                 usuarioEnBD.Password = usuarioActualizado.Password;
-               
             }
 
+            // Guardar cambios
             _usuarioRepository.ActualizarUsuario(usuarioEnBD);
         }
+
 
         public void EliminarUsuario(int usuarioId)
         {
