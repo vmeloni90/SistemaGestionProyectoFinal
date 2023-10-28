@@ -14,6 +14,8 @@
                     @ViewBag.MensajeError
                 </div>
             }
+            <h2>BIENVENIDO @Model.Nombre</h2>
+            <a href="@Url.Action("ListarUsuarios", "Usuario")" class="btn btn-primary mb-3">Ver todos los usuarios</a>
             <!-- Formulario de búsqueda por nombre -->
             <form method="post" asp-action="BuscarUsuario" asp-controller="Usuario">
                 <div class="input-group mb-3">
@@ -23,6 +25,8 @@
                     </div>
                 </div>
             </form>
+           
+
             @if (Model != null)
             {
                 <h2>Detalles del usuario</h2>

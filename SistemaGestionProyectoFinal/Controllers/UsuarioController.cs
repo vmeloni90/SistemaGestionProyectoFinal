@@ -68,7 +68,12 @@ namespace SistemaGestionProyectoFinal.Controllers
             return View("MostrarUsuario", usuario);
         }
 
-
+        [HttpGet]
+        public IActionResult ListarUsuarios()
+        {
+            var usuarios = _usuarioServices.GetUsuarios(); 
+            return View(usuarios);
+        }
 
         [HttpGet(Name = "GetUsuario")]
         public IEnumerable<Usuario> Get()
@@ -76,11 +81,11 @@ namespace SistemaGestionProyectoFinal.Controllers
             return _usuarioServices.GetUsuarios();
         }
 
-        [HttpDelete("{Id}", Name = "EliminarUsuario")]
+        [HttpPost("Eliminar/{Id}")]
         public IActionResult Delete(int Id)
         {
             _usuarioServices.EliminarUsuario(Id);
-            return Ok();
+            return RedirectToAction("ListarUsuarios", "Usuario");
         }
 
         [HttpPost]

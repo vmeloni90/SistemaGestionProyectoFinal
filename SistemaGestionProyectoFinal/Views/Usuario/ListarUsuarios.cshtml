@@ -1,0 +1,46 @@
+﻿@model IEnumerable<SistemaGestionEntities.Usuario>
+
+@{
+    ViewBag.Title = "Lista de usuarios";
+}
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Nombre de usuario</th>
+                <th>Email</th>
+                <th>Editar</th> 
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var usuario in Model)
+            {
+                <tr>
+                    <td>@usuario.Id</td>
+                    <td>@usuario.Nombre</td>
+                    <td>@usuario.Apellido</td>
+                    <td>@usuario.NombreUsuario</td>
+                    <td>@usuario.Mail</td>
+                    <td>
+                        <!-- Botón para editar -->
+                        <a href="@Url.Action("Editar", "Usuario", new { id = usuario.Id })" class="btn btn-primary">Editar</a>
+                    </td>
+                    <td>
+                        <!-- Formulario para borrar -->
+                        <form method="post" asp-action="Delete" asp-route-id="@usuario.Id" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este usuario?');">
+                            <input type="hidden" asp-antiforgery="true">
+                            <button type="submit" class="btn btn-danger">Borrar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -65,5 +65,6 @@ namespace SistemaGestionData.Repository
         {
             return context.Usuarios.FirstOrDefault(u => u.NombreUsuario == nombreUsuario);
         }
+    
     }
 }

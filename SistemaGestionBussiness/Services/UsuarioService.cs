@@ -124,5 +124,9 @@ namespace SistemaGestionBussiness.Services
 
             return _usuarioRepository.ObtenerUsuarioPorNombreUsuario(nombreUsuario);
         }
+        public List<Usuario> ObtenerTodosLosUsuarios()
+        {
+            return _usuarioRepository.GetUsuarios();
+        }
     }
 }

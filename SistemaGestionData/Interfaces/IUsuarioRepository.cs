@@ -15,5 +15,6 @@ namespace SistemaGestionData.Interfaces
         List<Usuario> GetUsuarios();
         void ActualizarUsuario(Usuario usuario);
         void EliminarUsuario(int usuarioId);
+
     }
 }
