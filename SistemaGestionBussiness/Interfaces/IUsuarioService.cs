@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,6 +16,6 @@ namespace SistemaGestionBussiness.Interfaces
         void EliminarUsuario(int usuarioId);
         Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
         List<Usuario> GetUsuarios();
-        bool AutenticarUsuario(string nombreUsuario, string passwordPlainText);
+        bool IsAuthenticated(ClaimsPrincipal user);
     }
 }

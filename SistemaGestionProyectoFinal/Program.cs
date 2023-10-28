@@ -9,14 +9,13 @@ using SistemaGestionData.Repository;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Agrega servicios al contenedor.
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddDbContext<SistemaGestionData.Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
 // Agrega los servicios para sesiones y memoria caché.
 builder.Services.AddDistributedMemoryCache();
@@ -27,13 +26,14 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddControllersWithViews();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -45,19 +45,17 @@ app.UseSession();
 
 app.UseRouting();
 
+// Si planeas usar autenticación, necesitas ambos middlewares y en este orden.
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
-    
+
+    endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Usuario}/{action=Login}/{id?}");
 });
 
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Usuario}/{action=Index}/{id?}");
-
-
 app.Run();
-

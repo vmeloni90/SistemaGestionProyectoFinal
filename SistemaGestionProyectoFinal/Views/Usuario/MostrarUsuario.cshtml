@@ -1,0 +1,37 @@
+﻿@model SistemaGestionEntities.Usuario
+
+@{
+    ViewBag.Title = "Detalles del usuario";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2>Detalles del usuario</h2>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <td>@Model.Id</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre</th>
+                        <td>@Model.Nombre</td>
+                    </tr>
+                    <tr>
+                        <th>Apellido</th>
+                        <td>@Model.Apellido</td>
+                    </tr>
+                    <tr>
+                        <th>Nombre de usuario</th>
+                        <td>@Model.NombreUsuario</td>
+                    </tr>
+                    <tr>
+                        <th>Email</th>
+                        <td>@Model.Mail</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

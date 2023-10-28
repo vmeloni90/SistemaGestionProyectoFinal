@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using SistemaGestionBussiness.Interfaces;
 using SistemaGestionBussiness.Services;
 using SistemaGestionEntities;
 
 namespace SistemaGestionProyectoFinal.Controllers
 {
-    [Route("api/users")]
-    [ApiController]
+
     public class UsuarioController : Controller
     {
+        private readonly ILogger<UsuarioController> _logger;
         private readonly IUsuarioService _usuarioServices;
-        public UsuarioController(IUsuarioService usuarioServices)
+        public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioServices)
         {
+            _logger = logger;
             _usuarioServices = usuarioServices;
         }
-
-        public IActionResult Index()
+        [HttpGet]
+        public IActionResult Login()
         {
             return View();
         }
-
 
         [HttpPost]
         public IActionResult Login(Usuario userModel)
@@ -28,7 +29,8 @@ namespace SistemaGestionProyectoFinal.Controllers
 
             if (userInDb != null && userModel.Password == userInDb.Password)
             {
-                return RedirectToAction("Index", "Home");
+                // Autenticación exitosa, redirigir al usuario a la vista de detalles del usuario.
+                return RedirectToAction("MostrarUsuario", new { id = userInDb.Id });
             }
             else
             {
@@ -36,6 +38,21 @@ namespace SistemaGestionProyectoFinal.Controllers
                 return View("Index", userModel);
             }
         }
+
+        public IActionResult MostrarUsuario(int id)
+        {
+            // Obtener el usuario por ID y mostrar sus detalles en la vista.
+            var user = _usuarioServices.ObtenerUsuarioPorId(id);
+            if (user == null)
+            {
+                // Manejar el caso en que el usuario no se encuentra.
+                return NotFound();
+            }
+
+            return View(user);
+        }
+
+
         [HttpGet(Name = "GetUsuario")]
         public IEnumerable<Usuario> Get()
         {

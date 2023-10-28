@@ -4,6 +4,7 @@ using SistemaGestionEntities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,15 +34,13 @@ namespace SistemaGestionBussiness.Services
             _usuarioRepository.AgregarUsuario(usuario);
         }
 
-       
-        public bool AutenticarUsuario(string nombreUsuario, string passwordPlainText)
+
+        public bool IsAuthenticated(ClaimsPrincipal user)
         {
-            var usuario = _usuarioRepository.ObtenerUsuarioPorNombreUsuario(nombreUsuario);
-            if (usuario != null)
-            {
-                return passwordPlainText == usuario.Password;
-            }
-            return false;
+            if (user == null)
+                return false;
+
+            return user.Identity.IsAuthenticated;
         }
 
 

@@ -6,48 +6,30 @@ using SistemaGestionBussiness;
 using SistemaGestionData;
 using SistemaGestionBussiness.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace SistemaGestionProyectoFinal.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IUsuarioService _usuarioService; 
+        private readonly IUsuarioService _usuarioService;
 
         public HomeController(ILogger<HomeController> logger, IUsuarioService usuarioService)
         {
             _logger = logger;
             _usuarioService = usuarioService;
         }
+
         public IActionResult Index()
         {
-            return View();
-        }
-
-        [HttpPost]
-        public IActionResult Index(string username)
-        {
-            var user = _usuarioService.ObtenerUsuarioPorNombreUsuario(username);
-
-            if (user != null)
+            if (!_usuarioService.IsAuthenticated(User))
             {
-                // Aquí puedes manejar lo que sucede cuando se encuentra un usuario
-                ViewBag.User = user;
-            }
-            else
-            {
-                // Aquí puedes manejar lo que sucede cuando no se encuentra un usuario
-                ViewBag.ErrorMessage = "Usuario no encontrado.";
+                return RedirectToAction("Login", "Usuario");
             }
 
             return View();
         }
-        private bool VerifyPassword(string enteredPassword, string storedPassword)
-        {
-            // Aquí deberías verificar si el hash del password ingresado coincide con el almacenado
-            return enteredPassword == storedPassword; // Temporalmente para tu ejemplo
-        }
-     
 
         public IActionResult Privacy()
         {
@@ -61,3 +43,4 @@ namespace SistemaGestionProyectoFinal.Controllers
         }
     }
 }
+
