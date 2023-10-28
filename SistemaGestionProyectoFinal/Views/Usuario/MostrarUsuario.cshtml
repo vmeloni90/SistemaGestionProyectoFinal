@@ -7,31 +7,52 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <h2>Detalles del usuario</h2>
-            <table class="table table-bordered">
-                <tbody>
-                    <tr>
-                        <th>ID</th>
-                        <td>@Model.Id</td>
-                    </tr>
-                    <tr>
-                        <th>Nombre</th>
-                        <td>@Model.Nombre</td>
-                    </tr>
-                    <tr>
-                        <th>Apellido</th>
-                        <td>@Model.Apellido</td>
-                    </tr>
-                    <tr>
-                        <th>Nombre de usuario</th>
-                        <td>@Model.NombreUsuario</td>
-                    </tr>
-                    <tr>
-                        <th>Email</th>
-                        <td>@Model.Mail</td>
-                    </tr>
-                </tbody>
-            </table>
+
+            @if (!string.IsNullOrEmpty(ViewBag.MensajeError))
+            {
+                <div class="alert alert-danger">
+                    @ViewBag.MensajeError
+                </div>
+            }
+            <!-- Formulario de búsqueda por nombre -->
+            <form method="post" asp-action="BuscarUsuario" asp-controller="Usuario">
+                <div class="input-group mb-3">
+                    <input type="text" name="nombreUsuario" class="form-control" placeholder="Buscar usuario por nombre de usuario">
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </form>
+            @if (Model != null)
+            {
+                <h2>Detalles del usuario</h2>
+                <table class="table table-bordered">
+                    <tbody>
+                        <tr>
+                            <th>ID</th>
+                            <td>@Model.Id</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre</th>
+                            <td>@Model.Nombre</td>
+                        </tr>
+                        <tr>
+                            <th>Apellido</th>
+                            <td>@Model.Apellido</td>
+                        </tr>
+                        <tr>
+                            <th>Nombre de usuario</th>
+                            <td>@Model.NombreUsuario</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>@Model.Mail</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            
+
         </div>
     </div>
 </div>

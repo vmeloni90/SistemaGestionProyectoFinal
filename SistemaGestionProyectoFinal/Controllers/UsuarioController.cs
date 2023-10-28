@@ -3,6 +3,8 @@ using Microsoft.Extensions.Logging;
 using SistemaGestionBussiness.Interfaces;
 using SistemaGestionBussiness.Services;
 using SistemaGestionEntities;
+using static System.Runtime.InteropServices.JavaScript.JSType;
+using System.Runtime.ConstrainedExecution;
 
 namespace SistemaGestionProyectoFinal.Controllers
 {
@@ -38,7 +40,7 @@ namespace SistemaGestionProyectoFinal.Controllers
                 return View("Index", userModel);
             }
         }
-
+        [HttpGet]
         public IActionResult MostrarUsuario(int id)
         {
             // Obtener el usuario por ID y mostrar sus detalles en la vista.
@@ -51,6 +53,21 @@ namespace SistemaGestionProyectoFinal.Controllers
 
             return View(user);
         }
+
+        [HttpPost]
+        public IActionResult BuscarUsuario(string nombreUsuario)
+        {
+            var usuario = _usuarioServices.ObtenerUsuarioPorNombreUsuario(nombreUsuario);
+
+            if (usuario == null)
+            {
+                ViewBag.MensajeError = "Usuario no encontrado.";
+                return View("MostrarUsuario"); 
+            }
+
+            return View("MostrarUsuario", usuario);
+        }
+
 
 
         [HttpGet(Name = "GetUsuario")]
