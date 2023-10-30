@@ -19,7 +19,7 @@ namespace SistemaGestionBussiness.Services
             _usuarioRepository = usuarioRepository;
         }
 
-        public void AgregarUsuario(Usuario usuario)
+        public void CreateUsuario(Usuario usuario)
         {
             if (usuario == null)
             {
@@ -31,7 +31,7 @@ namespace SistemaGestionBussiness.Services
                 throw new InvalidOperationException("El nombre de usuario ya está en uso.");
             }
 
-            _usuarioRepository.AgregarUsuario(usuario);
+            _usuarioRepository.CreateUsuario(usuario);
         }
 
 
@@ -59,7 +59,7 @@ namespace SistemaGestionBussiness.Services
             return _usuarioRepository.GetUsuarios();
         }
 
-        public void ActualizarUsuario(Usuario usuarioActualizado)
+        public void EditarUsuario(Usuario usuarioActualizado)
         {
             // Verificar si usuarioActualizado es nulo
             if (usuarioActualizado == null)
@@ -101,7 +101,7 @@ namespace SistemaGestionBussiness.Services
             }
 
             // Guardar cambios
-            _usuarioRepository.ActualizarUsuario(usuarioEnBD);
+            _usuarioRepository.EditarUsuario(usuarioEnBD);
         }
 
 

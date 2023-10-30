@@ -9,12 +9,12 @@ namespace SistemaGestionData.Interfaces
 {
     public interface IUsuarioRepository
     {
-        void AgregarUsuario(Usuario usuario);
+        void CreateUsuario(Usuario usuario);
         Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
         Usuario ObtenerUsuarioPorId(int usuarioId);
         List<Usuario> GetUsuarios();
-        void ActualizarUsuario(Usuario usuario);
+        void EditarUsuario(Usuario usuario);
         void EliminarUsuario(int usuarioId);
-
+        
     }
 }

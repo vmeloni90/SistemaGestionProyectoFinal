@@ -10,6 +10,10 @@ namespace SistemaGestionEntities
     {
         public int Id { get; set; }
         public string Comentarios { get; set; }
-        public virtual Usuario IdUsuario { get; set; }
+
+        public int UsuarioId { get; set; }
+        public virtual Usuario Usuario { get; set; }
+
+        public virtual List<ProductoVendido> ProductosVendidos { get; set; }
     }
 }

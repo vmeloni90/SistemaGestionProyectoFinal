@@ -1,48 +1,66 @@
-﻿@model SistemaGestionEntities.Usuario
+﻿@using SistemaGestionEntities;
 
-<h2>Editar Usuario</h2>
+@model Usuario
 
-<form asp-action="ActualizarPost" method="post">
+@{
+    ViewBag.Title = "Editar Usuario";
+}
 
-    <!-- Campo oculto para el ID -->
-    <input type="hidden" asp-for="Id" />
+<h2>@ViewBag.Title</h2>
 
-    <!-- Campo para Nombre -->
-    <div class="form-group">
-        <label asp-for="Nombre"></label>
-        <input asp-for="Nombre" class="form-control" />
-        <span asp-validation-for="Nombre" class="text-danger"></span>
+
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="EditarUsuario" method="post">
+
+            <!-- Campo oculto para el ID -->
+            <input type="hidden" asp-for="Id" />
+
+            <!-- Campo para Nombre -->
+            <div class="form-group">
+                <label asp-for="Nombre"></label>
+                <input asp-for="Nombre" class="form-control" />
+                <span asp-validation-for="Nombre" class="text-danger"></span>
+            </div>
+
+            <!-- Campo para Apellido -->
+            <div class="form-group">
+                <label asp-for="Apellido"></label>
+                <input asp-for="Apellido" class="form-control" />
+                <span asp-validation-for="Apellido" class="text-danger"></span>
+            </div>
+
+            <!-- Campo para NombreUsuario -->
+            <div class="form-group">
+                <label asp-for="NombreUsuario"></label>
+                <input asp-for="NombreUsuario" class="form-control" />
+                <span asp-validation-for="NombreUsuario" class="text-danger"></span>
+            </div>
+
+            <!-- Campo para Password -->
+            <div class="form-group">
+                <label asp-for="Password"></label>
+                <input asp-for="Password" class="form-control" type="password" />
+                <span asp-validation-for="Password" class="text-danger"></span>
+            </div>
+
+            <!-- Campo para Mail -->
+            <div class="form-group">
+                <label asp-for="Mail"></label>
+                <input asp-for="Mail" class="form-control" />
+                <span asp-validation-for="Mail" class="text-danger"></span>
+            </div>
+
+            <!-- Botón de envío -->
+            <input type="submit" value="Guardar" class="btn btn-primary" />
+
+        </form>
     </div>
+</div>
 
-    <!-- Campo para Apellido -->
-    <div class="form-group">
-        <label asp-for="Apellido"></label>
-        <input asp-for="Apellido" class="form-control" />
-        <span asp-validation-for="Apellido" class="text-danger"></span>
-    </div>
-
-    <!-- Campo para NombreUsuario -->
-    <div class="form-group">
-        <label asp-for="NombreUsuario"></label>
-        <input asp-for="NombreUsuario" class="form-control" />
-        <span asp-validation-for="NombreUsuario" class="text-danger"></span>
-    </div>
-
-    <!-- Campo para Password -->
-    <div class="form-group">
-        <label asp-for="Password"></label>
-        <input asp-for="Password" class="form-control" type="password" />
-        <span asp-validation-for="Password" class="text-danger"></span>
-    </div>
-
-    <!-- Campo para Mail -->
-    <div class="form-group">
-        <label asp-for="Mail"></label>
-        <input asp-for="Mail" class="form-control" />
-        <span asp-validation-for="Mail" class="text-danger"></span>
-    </div>
-
-    <!-- Botón de envío -->
-    <input type="submit" value="Guardar" class="btn btn-primary" />
-
-</form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

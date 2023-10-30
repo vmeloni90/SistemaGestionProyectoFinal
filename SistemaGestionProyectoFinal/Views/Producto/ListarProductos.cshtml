@@ -1,0 +1,49 @@
+﻿@model IEnumerable<SistemaGestionEntities.Producto>
+
+@{
+    ViewBag.Title = "Lista de productos";
+}
+
+<div class="container mt-5">
+    <h2>@ViewBag.Title</h2>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Descripción</th>
+                <th>Costo</th>
+                <th>Precio de Venta</th>
+                <th>Stock</th>
+                <th>Nombre de Usuario</th> 
+                <th>Editar</th>
+                <th>Borrar</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var producto in Model)
+            {
+                <tr>
+                    <td>@producto.Id</td>
+                    <td>@producto.Descripcion</td>
+                    <td>@producto.Costo</td>
+                    <td>@producto.PrecioVenta</td>
+                    <td>@producto.Stock</td>
+                    <td>@(producto.id.Nombre != null ? producto.id.Nombre : "No Asignado")</td>
+
+                    <td>
+                        <!-- Botón para editar -->
+                        <a href="@Url.Action("EditarProducto", "Producto", new { id = producto.Id })" class="btn btn-primary">Editar</a>
+                    </td>
+                    <td>
+                        <!-- Formulario para borrar -->
+                        <form method="post" asp-action="Delete" asp-route-id="@producto.Id" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+                            <input type="hidden" asp-antiforgery="true">
+                            <button type="submit" class="btn btn-danger">Borrar</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -20,7 +20,7 @@ namespace SistemaGestionData.Repository
             context = dbContext;
         }
 
-        public void AgregarUsuario(Usuario usuario)
+        public void CreateUsuario(Usuario usuario)
         {
             if (usuario == null)
             {
@@ -41,7 +41,7 @@ namespace SistemaGestionData.Repository
             return context.Usuarios.ToList();
         }
 
-        public void ActualizarUsuario(Usuario usuario)
+        public void EditarUsuario(Usuario usuario)
         {
             if (usuario == null)
             {

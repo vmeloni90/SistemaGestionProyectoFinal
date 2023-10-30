@@ -4,8 +4,13 @@
 }
 
 <h2>Crear Usuario</h2>
-
-<form asp-action="Create" method="post">
+@if (!string.IsNullOrEmpty(ViewBag.Message))
+{
+    <div class="alert alert-info">
+        @ViewBag.Message
+    </div>
+}
+<form asp-action="CreateUsuario" method="post">
     <div class="form-group">
         <label asp-for="Nombre">Nombre</label>
         <input asp-for="Nombre" class="form-control" />
@@ -38,3 +43,31 @@
 
     <button type="submit" class="btn btn-primary">Crear Usuario</button>
 </form>
+@if (Model != null && Model.Id > 0)  
+{
+    <h3 class="mt-4">Usuario Creado</h3>
+    <table class="table table-bordered">
+        <tbody>
+            <tr>
+                <th>ID</th>
+                <td>@Model.Id</td>
+            </tr>
+            <tr>
+                <th>Nombre</th>
+                <td>@Model.Nombre</td>
+            </tr>
+            <tr>
+                <th>Apellido</th>
+                <td>@Model.Apellido</td>
+            </tr>
+            <tr>
+                <th>Nombre de usuario</th>
+                <td>@Model.NombreUsuario</td>
+            </tr>
+            <tr>
+                <th>Correo Electrónico</th>
+                <td>@Model.Mail</td>
+            </tr>
+        </tbody>
+    </table>
+}

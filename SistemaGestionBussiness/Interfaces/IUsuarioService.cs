@@ -10,9 +10,9 @@ namespace SistemaGestionBussiness.Interfaces
 {
     public interface IUsuarioService
     {
-        void AgregarUsuario(Usuario usuario);
+        void CreateUsuario(Usuario usuario);
         Usuario ObtenerUsuarioPorId(int usuarioId);
-        void ActualizarUsuario(Usuario usuario);
+        void EditarUsuario(Usuario usuario);
         void EliminarUsuario(int usuarioId);
         Usuario ObtenerUsuarioPorNombreUsuario(string nombreUsuario);
         List<Usuario> GetUsuarios();

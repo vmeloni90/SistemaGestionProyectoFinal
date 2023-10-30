@@ -9,8 +9,13 @@ namespace SistemaGestionEntities
     public class ProductoVendido
     {
         public int Id { get; set; }
-        public virtual Producto IdProducto { get; set; }
+
+        public int ProductoId { get; set; }
+        public virtual Producto Producto { get; set; }
+
         public int Stock { get; set; }
-        public virtual Venta IdVenta { get; set; }
+
+        public int VentaId { get; set; }
+        public virtual Venta Venta { get; set; }
     }
 }

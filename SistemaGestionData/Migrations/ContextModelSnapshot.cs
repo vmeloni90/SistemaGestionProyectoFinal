@@ -42,7 +42,12 @@ namespace SistemaGestionData.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
+                    b.Property<int>("UsuarioId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Productos");
                 });
@@ -55,20 +60,20 @@ namespace SistemaGestionData.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<int>("IdProductoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdVentaId")
+                    b.Property<int>("ProductoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
+                    b.Property<int>("VentaId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("IdProductoId");
+                    b.HasIndex("ProductoId");
 
-                    b.HasIndex("IdVentaId");
+                    b.HasIndex("VentaId");
 
                     b.ToTable("ProductosVendidos");
                 });
@@ -101,10 +106,6 @@ namespace SistemaGestionData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Salt")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.HasKey("Id");
 
                     b.ToTable("Usuarios");
@@ -122,44 +123,60 @@ namespace SistemaGestionData.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IdUsuarioId")
+                    b.Property<int>("UsuarioId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("IdUsuarioId");
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Ventas");
                 });
 
+            modelBuilder.Entity("SistemaGestionEntities.Producto", b =>
+                {
+                    b.HasOne("SistemaGestionEntities.Usuario", "id")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("id");
+                });
+
             modelBuilder.Entity("SistemaGestionEntities.ProductoVendido", b =>
                 {
-                    b.HasOne("SistemaGestionEntities.Producto", "IdProducto")
+                    b.HasOne("SistemaGestionEntities.Producto", "Producto")
                         .WithMany()
-                        .HasForeignKey("IdProductoId")
+                        .HasForeignKey("ProductoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SistemaGestionEntities.Venta", "IdVenta")
-                        .WithMany()
-                        .HasForeignKey("IdVentaId")
+                    b.HasOne("SistemaGestionEntities.Venta", "Venta")
+                        .WithMany("ProductosVendidos")
+                        .HasForeignKey("VentaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdProducto");
+                    b.Navigation("Producto");
 
-                    b.Navigation("IdVenta");
+                    b.Navigation("Venta");
                 });
 
             modelBuilder.Entity("SistemaGestionEntities.Venta", b =>
                 {
-                    b.HasOne("SistemaGestionEntities.Usuario", "IdUsuario")
+                    b.HasOne("SistemaGestionEntities.Usuario", "Usuario")
                         .WithMany()
-                        .HasForeignKey("IdUsuarioId")
+                        .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("IdUsuario");
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("SistemaGestionEntities.Venta", b =>
+                {
+                    b.Navigation("ProductosVendidos");
                 });
 #pragma warning restore 612, 618
         }

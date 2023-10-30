@@ -5,6 +5,11 @@ using SistemaGestionBussiness.Services;
 using SistemaGestionEntities;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.Runtime.ConstrainedExecution;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
+
 
 namespace SistemaGestionProyectoFinal.Controllers
 {
@@ -13,10 +18,12 @@ namespace SistemaGestionProyectoFinal.Controllers
     {
         private readonly ILogger<UsuarioController> _logger;
         private readonly IUsuarioService _usuarioServices;
+        
         public UsuarioController(ILogger<UsuarioController> logger, IUsuarioService usuarioServices)
         {
             _logger = logger;
             _usuarioServices = usuarioServices;
+         
         }
         [HttpGet]
         public IActionResult Login()
@@ -25,13 +32,22 @@ namespace SistemaGestionProyectoFinal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Login(Usuario userModel)
+        public async Task<IActionResult> Login(Usuario userModel)
         {
             var userInDb = _usuarioServices.ObtenerUsuarioPorNombreUsuario(userModel.NombreUsuario);
 
             if (userInDb != null && userModel.Password == userInDb.Password)
             {
-                // Autenticación exitosa, redirigir al usuario a la vista de detalles del usuario.
+                var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.Name, userInDb.NombreUsuario),
+            // Puedes agregar más claims si es necesario
+        };
+
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
+
                 return RedirectToAction("MostrarUsuario", new { id = userInDb.Id });
             }
             else
@@ -40,6 +56,7 @@ namespace SistemaGestionProyectoFinal.Controllers
                 return View("Index", userModel);
             }
         }
+
 
         [HttpGet]
         public IActionResult MostrarUsuario(int id)
@@ -89,38 +106,52 @@ namespace SistemaGestionProyectoFinal.Controllers
             return RedirectToAction("ListarUsuarios", "Usuario");
         }
 
+
         [HttpPost]
-        public IActionResult Create(Usuario usuario)
+        public IActionResult CreateUsuario(Usuario usuario)
         {
             if (usuario == null)
             {
-                return BadRequest("El usuario no puede ser nulo.");
+                ViewBag.Message = "El usuario no puede ser nulo.";
+                return View("CreateUsuario");
             }
 
             if (ModelState.IsValid)
             {
-                _usuarioServices.AgregarUsuario(usuario);
+                _usuarioServices.CreateUsuario(usuario);
 
-                // Asumiendo que tienes un método 'Get' que toma un ID para obtener detalles de un usuario específico.
-                return CreatedAtAction(nameof(Get), new { id = usuario.Id }, usuario);
+                var listaDeUsuarios = _usuarioServices.GetUsuarios(); // Obtener la lista actualizada de usuarios
+                ViewBag.Message = "¡Usuario creado con éxito!";
+                return View("ListarUsuarios", listaDeUsuarios); // Pasar la lista de usuarios a la vista
             }
-
-            return BadRequest(ModelState);
+            else
+            {
+                ViewBag.Message = "Ocurrió un error al crear el usuario.";
+                return View("CreateUsuario");
+            }
         }
 
         [HttpGet]
-        public IActionResult Actualizar(int id)
+        public IActionResult CreateUsuario()
+        {
+            return View(new Usuario());
+        }
+
+        [HttpGet]
+        public IActionResult EditarUsuario(int id)
         {
             var user = _usuarioServices.ObtenerUsuarioPorId(id);
             if (user == null)
             {
+                
                 return NotFound();
             }
-
-            return View(user);
+           
+            return View("EditarUsuario",user);
+            
         }
         [HttpPost]
-        public IActionResult ActualizarPost(Usuario usuarioActualizado)
+        public IActionResult EditarUsuario(Usuario usuarioActualizado)
         {
             if (usuarioActualizado == null)
             {
@@ -131,7 +162,7 @@ namespace SistemaGestionProyectoFinal.Controllers
             {
                 try
                 {
-                    _usuarioServices.ActualizarUsuario(usuarioActualizado);
+                    _usuarioServices.EditarUsuario(usuarioActualizado);
                     return RedirectToAction("ListarUsuarios");
                 }
                 catch (ArgumentNullException)
@@ -147,7 +178,7 @@ namespace SistemaGestionProyectoFinal.Controllers
                     ModelState.AddModelError("", "Ocurrió un error al actualizar el usuario.");
                 }
             }
-
+            
             // Si no es válido o hay un error, devuelve a la vista de edición con los errores.
             return View("ListarUsuarios", usuarioActualizado);
         }

@@ -5,19 +5,28 @@ using Microsoft.Extensions.Hosting;
 using SistemaGestionBussiness.Interfaces;
 using SistemaGestionBussiness.Services;
 using SistemaGestionData.Interfaces;
+using SistemaGestionData;
 using SistemaGestionData.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Agrega servicios al contenedor.
+
 builder.Services.AddScoped<IUsuarioService, UsuarioService>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
+builder.Services.AddScoped<IProductoService, ProductoService>();
+builder.Services.AddScoped<IProductoRepository, ProductoRepository>();
 
 builder.Services.AddDbContext<SistemaGestionData.Context>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Agrega los servicios para sesiones y memoria caché.
+
+
+
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddSession(options =>
 {
@@ -26,11 +35,18 @@ builder.Services.AddSession(options =>
     options.Cookie.IsEssential = true;
 });
 
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Usuario/Login";
+        
+    });
+
 builder.Services.AddControllersWithViews();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -40,12 +56,12 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
-// Agrega el middleware de sesión antes de UseRouting.
+
 app.UseSession();
 
 app.UseRouting();
 
-// Si planeas usar autenticación, necesitas ambos middlewares y en este orden.
+
 app.UseAuthentication();
 app.UseAuthorization();
 
