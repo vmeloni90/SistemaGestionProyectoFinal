@@ -1,0 +1,33 @@
+﻿@model IEnumerable<SistemaGestionEntities.Venta>
+
+<h2>Listar Ventas</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Comentarios</th>
+            <th>Usuario ID</th>
+            <th>Nombre del Usuario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var venta in Model)
+        {
+            <tr>
+                <td>@venta.Id</td>
+                <td>@venta.Comentarios</td>
+                <td>@venta.UsuarioId</td>
+                <td>@venta.Usuario.Nombre</td> 
+                <td>
+                    <!-- Suponiendo que tienes acciones de Editar y Eliminar en tu controlador -->
+                    <a asp-action="EditarVenta" asp-route-id="@venta.Id">Editar</a> |
+                    <a asp-action="EliminarVenta" asp-route-id="@venta.Id">Eliminar</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<a asp-action="CargarVenta">Crear Nueva Venta</a>
+

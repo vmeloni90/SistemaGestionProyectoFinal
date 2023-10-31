@@ -5,6 +5,7 @@
 }
 
 <div class="container mt-5">
+    <a href="@Url.Action("CreateProducto", "Producto")" class="btn btn-success mb-3">Crear Producto</a>
     <h2>@ViewBag.Title</h2>
 
     <table class="table table-bordered">
@@ -15,7 +16,6 @@
                 <th>Costo</th>
                 <th>Precio de Venta</th>
                 <th>Stock</th>
-                <th>Nombre de Usuario</th> 
                 <th>Editar</th>
                 <th>Borrar</th>
             </tr>
@@ -29,7 +29,7 @@
                     <td>@producto.Costo</td>
                     <td>@producto.PrecioVenta</td>
                     <td>@producto.Stock</td>
-                    <td>@(producto.id.Nombre != null ? producto.id.Nombre : "No Asignado")</td>
+                    
 
                     <td>
                         <!-- Botón para editar -->
@@ -37,7 +37,8 @@
                     </td>
                     <td>
                         <!-- Formulario para borrar -->
-                        <form method="post" asp-action="Delete" asp-route-id="@producto.Id" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+                        <form method="post" asp-action="Delete" asp-route-Id="@producto.Id" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este producto?');">
+
                             <input type="hidden" asp-antiforgery="true">
                             <button type="submit" class="btn btn-danger">Borrar</button>
                         </form>

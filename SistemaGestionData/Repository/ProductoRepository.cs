@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SistemaGestionData.Interfaces;
 using SistemaGestionEntities;
 using System;
@@ -10,10 +11,11 @@ namespace SistemaGestionData.Repository
     public class ProductoRepository : IProductoRepository
     {
         private readonly Context context;
-
-        public ProductoRepository(Context dbContext)
+        private readonly ILogger<ProductoRepository> _logger;
+        public ProductoRepository(Context dbContext, ILogger<ProductoRepository> logger)
         {
             context = dbContext;
+            _logger = logger;
         }
 
         public void CreateProducto(Producto producto)
@@ -50,11 +52,20 @@ namespace SistemaGestionData.Repository
 
         public void EliminarProducto(int productoId)
         {
-            var producto = context.Productos.Find(productoId);
-            if (producto != null)
+            try
             {
-                context.Productos.Remove(producto);
-                context.SaveChanges();
+                var producto = context.Productos.Find(productoId);
+                if (producto != null)
+                {
+                    context.Productos.Remove(producto);
+                    context.SaveChanges();
+                }
+            }
+            catch (Exception ex)
+            {
+                // Asumiendo que tienes un logger configurado
+                _logger.LogError(ex, "Error al intentar eliminar el producto con ID: {productoId}", productoId);
+                throw;
             }
         }
 

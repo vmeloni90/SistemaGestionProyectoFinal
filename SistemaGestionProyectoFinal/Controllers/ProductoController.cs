@@ -31,12 +31,22 @@ namespace SistemaGestionProyectoFinal.Controllers
             return _productoService.GetProductos();
         }
 
-        [HttpPost("Eliminar/{Id}")]
+        [HttpPost("Delete/{Id}")]
         public IActionResult Delete(int Id)
         {
-            _productoService.EliminarProducto(Id);
-            return RedirectToAction("ListarProductos", "Producto");
+            try
+            {
+                _productoService.EliminarProducto(Id);
+                return RedirectToAction("ListarProductos", "Producto");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error al eliminar el producto con Id: {Id}", Id);
+                return StatusCode(500, $"Error interno del servidor: {ex.Message}");
+            }
+
         }
+
 
         [HttpGet]
         public IActionResult CreateProducto()

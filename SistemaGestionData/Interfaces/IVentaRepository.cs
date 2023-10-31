@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaGestionBussiness.Interfaces
+namespace SistemaGestionData.Interfaces
 {
-    public interface IVentaService
+    public interface IVentaRepository
     {
         public void CargarVenta(Venta venta);
         public Venta ObtenerVentaPorId(int ventaId);

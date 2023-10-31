@@ -11,7 +11,7 @@ using SistemaGestionData;
 namespace SistemaGestionData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231030013846_InitialMigration")]
+    [Migration("20231030220313_InitialMigration")]
     partial class InitialMigration
     {
         /// <inheritdoc />
@@ -45,12 +45,7 @@ namespace SistemaGestionData.Migrations
                     b.Property<int>("Stock")
                         .HasColumnType("int");
 
-                    b.Property<int>("UsuarioId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Productos");
                 });
@@ -134,17 +129,6 @@ namespace SistemaGestionData.Migrations
                     b.HasIndex("UsuarioId");
 
                     b.ToTable("Ventas");
-                });
-
-            modelBuilder.Entity("SistemaGestionEntities.Producto", b =>
-                {
-                    b.HasOne("SistemaGestionEntities.Usuario", "id")
-                        .WithMany()
-                        .HasForeignKey("UsuarioId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("id");
                 });
 
             modelBuilder.Entity("SistemaGestionEntities.ProductoVendido", b =>

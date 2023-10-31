@@ -20,9 +20,14 @@ namespace SistemaGestionProyectoFinal.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            var userName = User.Identity.Name;
             await _signInManager.SignOutAsync();
-            return View("~/Views/Shared/Logout.cshtml", userName);
+            return RedirectToAction("Logout", "Account");
+        }
+
+        [HttpGet]
+        public IActionResult LogoutGet()
+        {
+            return View();
         }
 
 

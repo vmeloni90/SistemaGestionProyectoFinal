@@ -6,9 +6,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Descripción de tu sitio web">
-    <meta name="keywords" content="palabra1, palabra2, palabra3">
-    <meta name="author" content="Nombre del Autor">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="Vanessa Meloni">
     <title>@ViewData["Title"] - SistemaGestionProyectoFinal</title>
     <link rel="icon" href="~/path_to_your_favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -17,12 +17,15 @@
 </head>
 <body>
     <header>
+        <div>
+            Autenticado: @User.Identity.IsAuthenticated
+        </div>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
            
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Sistema de Gestión</a>
 
-                @if (isAuthenticated)
+                @if (Context.User.Identity.IsAuthenticated)
                 {
                     <form asp-controller="Account" asp-action="Logout" method="post">
                         <button type="submit" class="btn btn-link navbar-btn navbar-right">Logout</button>
@@ -34,16 +37,23 @@
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
-                      
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ListarProductos">Productos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductoVendido" asp-action="ListarProductosVendidos">Productos Vendidos</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="ListarVentas"> Ventas</a>
-                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Usuario" asp-action="ListarUsuarios">Usuarios</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Producto" asp-action="ListarProductos">Productos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="ProductoVendido" asp-action="ListarProductosVendidos">Productos Vendidos</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Venta" asp-action="ListarVentas">Ventas</a>
+                            </li>
+                        }
+
                     </ul>
                 </div>
             </div>

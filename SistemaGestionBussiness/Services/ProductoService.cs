@@ -47,10 +47,7 @@ namespace SistemaGestionBussiness.Services
             }
 
           
-            if (producto.UsuarioId == null)
-            {
-                throw new ArgumentException("El producto debe estar asociado a un usuario.");
-            }
+         
 
             _productoRepository.CreateProducto(producto);
         }
@@ -105,17 +102,12 @@ namespace SistemaGestionBussiness.Services
             }
 
            
-            if (productoActualizado.UsuarioId == null)
-            {
-                throw new ArgumentException("El producto debe estar asociado a un usuario.");
-            }
-
-            
+                     
             productoEnBD.Descripcion = productoActualizado.Descripcion;
             productoEnBD.Costo = productoActualizado.Costo;
             productoEnBD.PrecioVenta = productoActualizado.PrecioVenta;
             productoEnBD.Stock = productoActualizado.Stock;
-            productoEnBD.UsuarioId = productoActualizado.UsuarioId;
+           
 
             _productoRepository.EditarProducto(productoEnBD);
         }
