@@ -1,0 +1,21 @@
+﻿@model SistemaGestionEntities.Venta
+
+<h2>Editar Venta</h2>
+
+<form method="post" action="/Venta/EditarVenta">
+    <input type="hidden" name="Id" value="@Model.Id" />
+
+    <div>
+        <label for="Comentarios">Comentarios:</label>
+        <input type="text" name="Comentarios" value="@Model.Comentarios" />
+    </div>
+
+    <div>
+        <label for="UsuarioId">Usuario ID:</label>
+        <input type="number" name="UsuarioId" value="@Model.UsuarioId" />
+    </div>
+
+ 
+
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+</form>

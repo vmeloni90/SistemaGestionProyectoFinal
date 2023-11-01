@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SistemaGestionBussiness.Interfaces;
+using SistemaGestionBussiness.Services;
 using SistemaGestionEntities;
+using SistemaGestionProyectoFinal.Views.Model;
 using SistemaGestionServices;
 
 namespace SistemaGestionWeb.Controllers
@@ -9,10 +11,12 @@ namespace SistemaGestionWeb.Controllers
     public class VentaController : Controller
     {
         private readonly IVentaService _ventaService;
+        private readonly IProductoService _productoService;
         
-        public VentaController(IVentaService ventaService)
+        public VentaController(IVentaService ventaService, IProductoService productoService)
         {
             _ventaService = ventaService ?? throw new ArgumentNullException(nameof(ventaService));
+            _productoService = productoService ?? throw new ArgumentNullException(nameof(productoService));
         }
 
         [HttpGet]
@@ -25,70 +29,64 @@ namespace SistemaGestionWeb.Controllers
         [HttpGet]
         public IActionResult CargarVenta()
         {
-            return View();
+            var viewModel = new CargarVentaViewModel
+            {
+
+                ProductosDisponibles = _productoService.GetProductos() 
+            };
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public IActionResult ListarProductosVendidos()
+        {
+            var productosVendidos = _ventaService.MostrarProductosVendidos();
+            return View(productosVendidos);
         }
 
         [HttpPost]
-        public IActionResult CargarVenta(Venta venta)
+        public IActionResult CargarVenta(CargarVentaViewModel viewModel)
         {
-            if (venta == null)
-                return BadRequest("Venta data is null.");
-
-            _ventaService.CargarVenta(venta);
+            _ventaService.CargarVenta(viewModel.ProductosSeleccionados, viewModel.CantidadVendida, viewModel.Comentarios, viewModel.UsuarioId);
             return RedirectToAction(nameof(ListarVentas));
         }
 
-        [HttpGet("api/ventas")]
-        public IActionResult Get()
-        {
-            var ventas = _ventaService.MostrarVentas();
-            return Ok(ventas);
-        }
 
-        [HttpGet("api/ventas/{id}")]
-        public IActionResult Get(int id)
-        {
-            var venta = _ventaService.ObtenerVentaPorId(id);
 
-            if (venta == null)
-                return NotFound();
 
-            return Ok(venta);
-        }
-
-        [HttpPost("api/ventas")]
-        public IActionResult Post([FromBody] Venta venta)
+        [HttpPost]
+        public IActionResult EditarVenta(Venta venta)
         {
             if (venta == null)
                 return BadRequest("Venta data is null.");
 
-            _ventaService.CargarVenta(venta);
-            return CreatedAtAction(nameof(Get), new { id = venta.Id }, venta);
-        }
-
-        [HttpPut("api/ventas/{id}")]
-        public IActionResult Put(int id, [FromBody] Venta venta)
-        {
-            if (venta == null)
-                return BadRequest("Venta data is null.");
-
-            var ventaExistente = _ventaService.ObtenerVentaPorId(id);
+            var ventaExistente = _ventaService.ObtenerVentaPorId(venta.Id);
             if (ventaExistente == null)
                 return NotFound();
 
             _ventaService.EditarVenta(venta);
-            return NoContent();
+            return RedirectToAction("ListarVentas"); 
         }
 
-        [HttpDelete("api/ventas/{id}")]
-        public IActionResult Delete(int id)
+        [HttpGet]
+        public IActionResult EditarVenta(int id)
+        {
+            var venta = _ventaService.ObtenerVentaPorId(id);
+            if (venta == null)
+                return NotFound();
+
+            return View(venta);
+        }
+
+        [HttpPost]
+        public IActionResult EliminarVenta(int id)
         {
             var venta = _ventaService.ObtenerVentaPorId(id);
             if (venta == null)
                 return NotFound();
 
             _ventaService.EliminarVenta(id);
-            return NoContent();
+            return RedirectToAction("ListarVentas");
         }
     }
 }

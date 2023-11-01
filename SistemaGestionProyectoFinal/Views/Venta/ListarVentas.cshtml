@@ -23,7 +23,9 @@
                 <td>
                     <!-- Suponiendo que tienes acciones de Editar y Eliminar en tu controlador -->
                     <a asp-action="EditarVenta" asp-route-id="@venta.Id">Editar</a> |
-                    <a asp-action="EliminarVenta" asp-route-id="@venta.Id">Eliminar</a>
+                    <form asp-action="EliminarVenta" asp-route-id="@venta.Id" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de que deseas eliminar esta venta?');">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         }

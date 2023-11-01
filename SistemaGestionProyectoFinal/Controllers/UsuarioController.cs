@@ -41,7 +41,6 @@ namespace SistemaGestionProyectoFinal.Controllers
                 var claims = new List<Claim>
         {
             new Claim(ClaimTypes.Name, userInDb.NombreUsuario),
-            // Puedes agregar más claims si es necesario
         };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -61,11 +60,9 @@ namespace SistemaGestionProyectoFinal.Controllers
         [HttpGet]
         public IActionResult MostrarUsuario(int id)
         {
-            // Obtener el usuario por ID y mostrar sus detalles en la vista.
             var user = _usuarioServices.ObtenerUsuarioPorId(id);
             if (user == null)
             {
-                // Manejar el caso en que el usuario no se encuentra.
                 return NotFound();
             }
 
@@ -120,9 +117,9 @@ namespace SistemaGestionProyectoFinal.Controllers
             {
                 _usuarioServices.CreateUsuario(usuario);
 
-                var listaDeUsuarios = _usuarioServices.GetUsuarios(); // Obtener la lista actualizada de usuarios
+                var listaDeUsuarios = _usuarioServices.GetUsuarios(); 
                 ViewBag.Message = "¡Usuario creado con éxito!";
-                return View("ListarUsuarios", listaDeUsuarios); // Pasar la lista de usuarios a la vista
+                return View("ListarUsuarios", listaDeUsuarios);
             }
             else
             {

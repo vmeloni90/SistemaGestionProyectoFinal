@@ -4,29 +4,33 @@ using System;
 using System.Collections.Generic;
 using SistemaGestionBussiness.Interfaces;
 using SistemaGestionData.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
 namespace SistemaGestionServices
 {
     public class VentaService: IVentaService
     {
         private readonly IVentaRepository _ventaRepository;
+        private readonly IProductoVendidoRepository _productoVendidoRepository;
 
-        public VentaService(IVentaRepository ventaRepository)
+
+        public VentaService(IVentaRepository ventaRepository, IProductoVendidoRepository productoVendidoRepository)
         {
             _ventaRepository = ventaRepository ?? throw new ArgumentNullException(nameof(ventaRepository));
+            _productoVendidoRepository = productoVendidoRepository;
         }
 
        
-        public void CargarVenta(Venta venta)
+        public void CargarVenta(List<int> productos, int cantidad, string comentario, int usuario)
         {
-            if (venta == null)
-                throw new ArgumentException("La venta no puede ser nula.");
+            Venta venta = new Venta();
+            venta.UsuarioId = usuario;
+            venta.Comentarios = comentario;
 
-            if (venta.ProductosVendidos == null || venta.ProductosVendidos.Count == 0)
-                throw new ArgumentException("La venta debe tener al menos un producto.");
-
-            
             _ventaRepository.CargarVenta(venta);
+
+
+
         }
 
         
@@ -41,7 +45,8 @@ namespace SistemaGestionServices
         
         public List<Venta> MostrarVentas()
         {
-            return _ventaRepository.MostrarVentas();
+            var list = _ventaRepository.MostrarVentas();            
+            return list;
         }
 
         
@@ -64,6 +69,12 @@ namespace SistemaGestionServices
                 throw new ArgumentException("ID de venta inválido.");
 
             _ventaRepository.EliminarVenta(ventaId);
+        }
+
+        public List<ProductoVendido> MostrarProductosVendidos()
+        {
+            var list = _productoVendidoRepository.MostrarProductosVendidos();
+            return list;
         }
     }
 }

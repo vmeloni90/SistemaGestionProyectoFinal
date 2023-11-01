@@ -16,7 +16,7 @@ namespace SistemaGestionData.Repository
             context = dbContext;
         }
 
-        // Método para agregar una nueva venta
+      
         public void CargarVenta(Venta venta)
         {
             if (venta == null)
@@ -28,7 +28,6 @@ namespace SistemaGestionData.Repository
             context.SaveChanges();
         }
 
-        // Método para obtener una venta por ID
         public Venta ObtenerVentaPorId(int ventaId)
         {
             return context.Ventas
@@ -46,7 +45,7 @@ namespace SistemaGestionData.Repository
                 .ToList();
         }
 
-        // Método para editar una venta
+
         public void EditarVenta(Venta venta)
         {
             if (venta == null)
@@ -54,11 +53,21 @@ namespace SistemaGestionData.Repository
                 throw new ArgumentNullException(nameof(venta));
             }
 
-            context.Entry(venta).State = EntityState.Modified;
-            context.SaveChanges();
+            var ventaExistente = context.Ventas.FirstOrDefault(v => v.Id == venta.Id);
+            if (ventaExistente != null)
+            {
+                ventaExistente.Comentarios = venta.Comentarios;
+                ventaExistente.UsuarioId = venta.UsuarioId;
+                context.SaveChanges();
+            }
+            else
+            {
+                throw new Exception("Venta no encontrada");
+            }
         }
 
-        // Método para eliminar una venta por ID
+
+
         public void EliminarVenta(int ventaId)
         {
             var venta = context.Ventas.Find(ventaId);

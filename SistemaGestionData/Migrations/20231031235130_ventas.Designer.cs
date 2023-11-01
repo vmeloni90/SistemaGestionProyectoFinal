@@ -11,8 +11,8 @@ using SistemaGestionData;
 namespace SistemaGestionData.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20231030220313_InitialMigration")]
-    partial class InitialMigration
+    [Migration("20231031235130_ventas")]
+    partial class ventas
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

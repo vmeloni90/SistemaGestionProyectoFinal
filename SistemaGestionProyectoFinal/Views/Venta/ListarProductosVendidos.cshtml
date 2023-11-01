@@ -1,0 +1,28 @@
+﻿@model IEnumerable<SistemaGestionEntities.ProductoVendido>
+
+<h2>Listar Productos Vendidos</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID de producto vendido</th>
+            <th>Venta ID</th>
+            <th>Cantidad Vendida </th>
+            <th>Nombre del Producto</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var prodVendido in Model)
+        {
+            <tr>
+                <td>@prodVendido.ProductoId</td>
+                <td>@prodVendido.VentaId</td>
+                <td>@prodVendido.Stock</td>
+                <td>@prodVendido.Producto.Descripcion</td>
+               
+            </tr>
+        }
+    </tbody>
+</table>
+
+

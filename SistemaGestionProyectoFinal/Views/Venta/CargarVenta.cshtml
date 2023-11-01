@@ -1,15 +1,34 @@
-﻿@model SistemaGestionEntities.Venta
+﻿@using SistemaGestionProyectoFinal.Views.Model
+@using SistemaGestionEntities
+@model CargarVentaViewModel
 
-<h2>Cargar Venta</h2>
+<h2>Cargar Nueva Venta</h2>
 
-<form asp-action="Post" method="post">
+<form asp-action="CargarVenta" method="post">
+
     <div class="form-group">
-        <label for="Comentarios">Comentarios</label>
-        <input type="text" class="form-control" id="Comentarios" name="Comentarios" value="@Model.Comentarios">
+        <label for="Comentarios">Comentarios:</label>
+        <input type="text" class="form-control" name="Comentarios" />
+    </div>
+
+    <div class="form-group">
+        <label for="UsuarioId">Usuario ID:</label>
+        <input type="number" class="form-control" name="UsuarioId" />
     </div>
     <div class="form-group">
-        <label for="UsuarioId">Usuario ID</label>
-        <input type="text" class="form-control" id="UsuarioId" name="UsuarioId" value="@Model.UsuarioId">
+        <label>Productos:</label>
+        @foreach (var producto in Model.ProductosDisponibles)
+        {
+            <div>
+                <input type="checkbox" name="ProductosSeleccionados" value="@producto.Id" /> @producto.Descripcion
+            </div>
+        }
     </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
+    <div class="form-group">
+        <label for="cantidadVendida">Cantidad Vendida:</label>
+        <input type="number" class="form-control" name="CantidadVendida" />
+    </div>
+
+
+    <button type="submit" class="btn btn-primary">Guardar Venta</button>
 </form>
